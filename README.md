@@ -293,3 +293,20 @@ end
 ## License
 
 MIT License - Copyright (c) 2026 [Lockwood Technology Ltd](https://lockwood.co.tz)
+
+
+---
+
+## See Also
+
+| SDK | Install |
+|-----|---------|
+| [Node.js](https://github.com/Malipopay/malipopay-node) | `npm install malipopay` |
+| [Python](https://github.com/Malipopay/malipopay-python) | `pip install malipopay` |
+| [PHP](https://github.com/Malipopay/malipopay-php) | `composer require malipopay/malipopay-php` |
+| [Java](https://github.com/Malipopay/malipopay-java) | Maven / Gradle |
+| [.NET](https://github.com/Malipopay/malipopay-dotnet) | `dotnet add package MaliPoPay` |
+| [Ruby](https://github.com/Malipopay/malipopay-ruby) | `gem install malipopay` |
+
+[API Reference](https://developers.malipopay.co.tz) | [OpenAPI Spec](https://github.com/Malipopay/malipopay-openapi) | [Test Scenarios](https://github.com/Malipopay/malipopay-sdk-tests)
+

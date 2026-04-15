@@ -3,7 +3,7 @@
 require "spec_helper"
 require "json"
 
-RSpec.describe MaliPoPay::Webhooks::Verifier do
+RSpec.describe Malipopay::Webhooks::Verifier do
   let(:secret) { "whsec_test_secret_key" }
   let(:verifier) { described_class.new(secret) }
   let(:payload) { '{"event":"payment.completed","data":{"reference":"PAY-123"}}' }
@@ -71,7 +71,7 @@ RSpec.describe MaliPoPay::Webhooks::Verifier do
     it "raises AuthenticationError for an invalid signature" do
       expect {
         verifier.construct_event(payload, "bad_signature")
-      }.to raise_error(MaliPoPay::AuthenticationError, "Invalid webhook signature")
+      }.to raise_error(Malipopay::AuthenticationError, "Invalid webhook signature")
     end
   end
 end

@@ -1,14 +1,14 @@
 # Webhooks
 
-Webhooks let you receive real-time notifications when events happen in MaliPoPay -- payment completed, payment failed, disbursement processed, etc. Instead of polling the API, you register a URL and MaliPoPay sends HTTP POST requests to it.
+Webhooks let you receive real-time notifications when events happen in Malipopay -- payment completed, payment failed, disbursement processed, etc. Instead of polling the API, you register a URL and Malipopay sends HTTP POST requests to it.
 
 ## How Webhooks Work
 
-1. You register a webhook URL in your MaliPoPay dashboard at [app.malipopay.co.tz](https://app.malipopay.co.tz) under **Settings > Webhooks**
-2. MaliPoPay generates a **webhook signing secret** for you
-3. When an event occurs, MaliPoPay sends a POST request to your URL with:
+1. You register a webhook URL in your Malipopay dashboard at [app.malipopay.co.tz](https://app.malipopay.co.tz) under **Settings > Webhooks**
+2. Malipopay generates a **webhook signing secret** for you
+3. When an event occurs, Malipopay sends a POST request to your URL with:
    - The event payload as JSON in the request body
-   - An `X-MaliPoPay-Signature` header containing the HMAC-SHA256 signature
+   - An `X-Malipopay-Signature` header containing the HMAC-SHA256 signature
 4. Your endpoint verifies the signature and processes the event
 
 ## Event Types
@@ -32,7 +32,7 @@ require 'json'
 require 'malipopay'
 
 WEBHOOK_SECRET = ENV.fetch('MALIPOPAY_WEBHOOK_SECRET')
-verifier = MaliPoPay::Webhooks::Verifier.new(WEBHOOK_SECRET)
+verifier = Malipopay::Webhooks::Verifier.new(WEBHOOK_SECRET)
 
 post '/webhooks/malipopay' do
   payload = request.body.read
@@ -63,7 +63,7 @@ post '/webhooks/malipopay' do
 
     status 200
     'OK'
-  rescue MaliPoPay::Error => e
+  rescue Malipopay::Error => e
     puts "Webhook verification failed: #{e.message}"
     halt 401, 'Invalid signature'
   end
@@ -72,7 +72,7 @@ end
 
 ## Rails Controller Example
 
-A full Rails controller for handling MaliPoPay webhooks:
+A full Rails controller for handling Malipopay webhooks:
 
 ```ruby
 # app/controllers/webhooks/malipopay_controller.rb
@@ -82,7 +82,7 @@ module Webhooks
 
     def create
       payload = request.body.read
-      signature = request.headers['X-MaliPoPay-Signature']
+      signature = request.headers['X-Malipopay-Signature']
 
       unless signature.present?
         render json: { error: 'Missing signature' }, status: :bad_request
@@ -93,7 +93,7 @@ module Webhooks
         event = webhook_verifier.construct_event(payload, signature)
         handle_event(event)
         head :ok
-      rescue MaliPoPay::Error => e
+      rescue Malipopay::Error => e
         Rails.logger.error("Webhook verification failed: #{e.message}")
         head :unauthorized
       end
@@ -102,7 +102,7 @@ module Webhooks
     private
 
     def webhook_verifier
-      @webhook_verifier ||= MaliPoPay::Webhooks::Verifier.new(
+      @webhook_verifier ||= Malipopay::Webhooks::Verifier.new(
         ENV.fetch('MALIPOPAY_WEBHOOK_SECRET')
       )
     end
@@ -164,12 +164,12 @@ end
 
 ## Signature Verification
 
-Every webhook request includes an `X-MaliPoPay-Signature` header. The signature is an HMAC-SHA256 hash of the raw request body, signed with your webhook secret.
+Every webhook request includes an `X-Malipopay-Signature` header. The signature is an HMAC-SHA256 hash of the raw request body, signed with your webhook secret.
 
-The `MaliPoPay::Webhooks::Verifier` handles this for you:
+The `Malipopay::Webhooks::Verifier` handles this for you:
 
 ```ruby
-verifier = MaliPoPay::Webhooks::Verifier.new('your_webhook_secret')
+verifier = Malipopay::Webhooks::Verifier.new('your_webhook_secret')
 
 # Just verify (returns true/false)
 valid = verifier.verify(payload, signature)
@@ -195,7 +195,7 @@ end
 
 1. **Always verify signatures.** Never process a webhook without checking the signature. This prevents spoofed requests.
 
-2. **Return 200 quickly.** Process the event asynchronously if needed (e.g., with Sidekiq or ActiveJob). MaliPoPay expects a response within 30 seconds. If you don't return 200, the webhook will be retried.
+2. **Return 200 quickly.** Process the event asynchronously if needed (e.g., with Sidekiq or ActiveJob). Malipopay expects a response within 30 seconds. If you don't return 200, the webhook will be retried.
 
 3. **Handle duplicates.** Webhooks may be delivered more than once. Use the `reference` or `transaction_id` as an idempotency key.
 

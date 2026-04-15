@@ -1,18 +1,18 @@
 # Error Handling
 
-The MaliPoPay Ruby SDK uses a structured exception hierarchy so you can rescue specific error types and respond appropriately. All exceptions inherit from `MaliPoPay::Error`.
+The Malipopay Ruby SDK uses a structured exception hierarchy so you can rescue specific error types and respond appropriately. All exceptions inherit from `Malipopay::Error`.
 
 ## Exception Hierarchy
 
 ```
-MaliPoPay::Error (base)
-├── MaliPoPay::AuthenticationError    (HTTP 401 -- invalid or missing API key)
-├── MaliPoPay::PermissionError        (HTTP 403 -- insufficient permissions)
-├── MaliPoPay::NotFoundError          (HTTP 404 -- resource does not exist)
-├── MaliPoPay::ValidationError        (HTTP 422 -- invalid request parameters)
-├── MaliPoPay::RateLimitError         (HTTP 429 -- too many requests)
-├── MaliPoPay::ApiError               (HTTP 5xx -- server-side error)
-└── MaliPoPay::ConnectionError        (network timeout, DNS failure, etc.)
+Malipopay::Error (base)
+├── Malipopay::AuthenticationError    (HTTP 401 -- invalid or missing API key)
+├── Malipopay::PermissionError        (HTTP 403 -- insufficient permissions)
+├── Malipopay::NotFoundError          (HTTP 404 -- resource does not exist)
+├── Malipopay::ValidationError        (HTTP 422 -- invalid request parameters)
+├── Malipopay::RateLimitError         (HTTP 429 -- too many requests)
+├── Malipopay::ApiError               (HTTP 5xx -- server-side error)
+└── Malipopay::ConnectionError        (network timeout, DNS failure, etc.)
 ```
 
 ## Rescuing Specific Exceptions
@@ -32,34 +32,34 @@ begin
 
   puts "Collection initiated: #{result['reference']}"
 
-rescue MaliPoPay::AuthenticationError
+rescue Malipopay::AuthenticationError
   # API key is invalid or expired
   puts 'Authentication failed. Rotate your API key at app.malipopay.co.tz'
 
-rescue MaliPoPay::PermissionError
+rescue Malipopay::PermissionError
   # API key lacks permission for this operation
   puts 'Insufficient permissions. Check your API key scopes.'
 
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   # The request had invalid fields
   puts "Invalid request: #{e.message}"
   # e.message might say: "phone must be a valid Tanzanian number (255xxxxxxxxx)"
 
-rescue MaliPoPay::NotFoundError
+rescue Malipopay::NotFoundError
   puts 'The requested resource was not found.'
 
-rescue MaliPoPay::RateLimitError
+rescue Malipopay::RateLimitError
   puts 'Too many requests. Back off and retry.'
 
-rescue MaliPoPay::ApiError => e
-  # MaliPoPay server error -- transient, safe to retry
+rescue Malipopay::ApiError => e
+  # Malipopay server error -- transient, safe to retry
   puts "Server error (#{e.message}). Retrying..."
 
-rescue MaliPoPay::ConnectionError => e
+rescue Malipopay::ConnectionError => e
   # Network-level failure
   puts "Connection failed: #{e.message}"
 
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   # Catch-all for any other SDK error
   puts "Unexpected error: #{e.message}"
 end
@@ -67,7 +67,7 @@ end
 
 ## Exception Properties
 
-Every `MaliPoPay::Error` includes:
+Every `Malipopay::Error` includes:
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -81,15 +81,15 @@ The SDK automatically retries transient errors (5xx, connection timeouts) based 
 ### Built-in Retries
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_API_KEY'],
   retries: 3  # retry up to 3 times on transient failures (default: 2)
 )
 ```
 
 The SDK uses exponential backoff between retries. It will only retry on:
-- `MaliPoPay::ApiError` (5xx responses)
-- `MaliPoPay::ConnectionError` (network timeouts and DNS failures)
+- `Malipopay::ApiError` (5xx responses)
+- `Malipopay::ConnectionError` (network timeouts and DNS failures)
 
 It will **not** retry on:
 - `AuthenticationError` (fix your API key)
@@ -106,7 +106,7 @@ def with_rate_limit_retry(max_retries: 3)
 
   begin
     yield
-  rescue MaliPoPay::RateLimitError
+  rescue Malipopay::RateLimitError
     attempts += 1
     raise if attempts > max_retries
 
@@ -133,7 +133,7 @@ end
 ### Generic Retry Helper
 
 ```ruby
-def with_retry(max_retries: 3, on: [MaliPoPay::ApiError, MaliPoPay::ConnectionError])
+def with_retry(max_retries: 3, on: [Malipopay::ApiError, Malipopay::ConnectionError])
   attempts = 0
 
   begin
@@ -186,7 +186,7 @@ end
 | "amount must be greater than 0" | Zero or negative amount | Provide a positive integer amount in TZS |
 | "provider is required" | Missing `provider` field | Specify one of: `M-Pesa`, `Airtel Money`, `Mixx`, `Halopesa`, `T-Pesa`, `CRDB`, `NMB` |
 | "reference must be unique" | Duplicate reference string | Generate a unique reference per transaction |
-| "currency must be TZS" | Unsupported currency | MaliPoPay currently supports TZS only |
+| "currency must be TZS" | Unsupported currency | Malipopay currently supports TZS only |
 
 ### NotFoundError (404)
 
@@ -234,8 +234,8 @@ begin
     reference: 'ORD-2024-300',
     description: 'Logging example'
   )
-rescue MaliPoPay::Error => e
-  logger.error("MaliPoPay API error: status=#{e.status_code} message=#{e.message}")
+rescue Malipopay::Error => e
+  logger.error("Malipopay API error: status=#{e.status_code} message=#{e.message}")
   raise
 end
 ```
@@ -250,17 +250,17 @@ module MalipopayErrorHandling
   extend ActiveSupport::Concern
 
   included do
-    rescue_from MaliPoPay::AuthenticationError do |e|
-      Rails.logger.error("MaliPoPay auth error: #{e.message}")
+    rescue_from Malipopay::AuthenticationError do |e|
+      Rails.logger.error("Malipopay auth error: #{e.message}")
       render json: { error: 'Payment service authentication failed' }, status: :service_unavailable
     end
 
-    rescue_from MaliPoPay::ValidationError do |e|
+    rescue_from Malipopay::ValidationError do |e|
       render json: { error: e.message }, status: :unprocessable_entity
     end
 
-    rescue_from MaliPoPay::Error do |e|
-      Rails.logger.error("MaliPoPay error: #{e.class} - #{e.message}")
+    rescue_from Malipopay::Error do |e|
+      Rails.logger.error("Malipopay error: #{e.class} - #{e.message}")
       render json: { error: 'Payment service error' }, status: :service_unavailable
     end
   end

@@ -4,7 +4,7 @@ The `payments` resource handles all payment operations: mobile money collections
 
 ## How Payments Work in Tanzania
 
-MaliPoPay integrates with Tanzania's major mobile money and banking networks:
+Malipopay integrates with Tanzania's major mobile money and banking networks:
 
 - **Vodacom M-Pesa** -- largest mobile money network
 - **Airtel Money** -- second-largest MNO
@@ -18,16 +18,16 @@ MaliPoPay integrates with Tanzania's major mobile money and banking networks:
 ### Collection Flow
 
 1. Your app calls `collect` with the customer's phone number and amount
-2. MaliPoPay sends a USSD push to the customer's phone
+2. Malipopay sends a USSD push to the customer's phone
 3. The customer sees a prompt like: *"Pay TZS 50,000 to ACME Ltd? Enter PIN to confirm"*
 4. The customer enters their mobile money PIN
-5. MaliPoPay receives the confirmation and notifies you via webhook
+5. Malipopay receives the confirmation and notifies you via webhook
 6. You can also poll using `verify`
 
 ### Disbursement Flow
 
 1. Your app calls `disburse` with the recipient's phone/account and amount
-2. MaliPoPay processes the transfer from your merchant float
+2. Malipopay processes the transfer from your merchant float
 3. The recipient receives the funds in their mobile money or bank account
 4. You receive a webhook notification with the result
 
@@ -259,19 +259,19 @@ begin
     reference: 'ORDER-001',
     description: 'Test payment'
   )
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   # Invalid parameters (wrong phone format, missing fields, etc.)
   puts "Validation error: #{e.message}"
-rescue MaliPoPay::AuthenticationError
+rescue Malipopay::AuthenticationError
   # Bad API key
   puts 'Check your API key.'
-rescue MaliPoPay::RateLimitError
+rescue Malipopay::RateLimitError
   # Too many requests -- back off and retry
   puts 'Rate limited. Please wait and retry.'
-rescue MaliPoPay::ConnectionError => e
+rescue Malipopay::ConnectionError => e
   # Network issue
   puts "Network error: #{e.message}"
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   # Catch-all for other SDK errors
   puts "Payment error: #{e.message}"
 end

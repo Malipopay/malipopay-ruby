@@ -1,14 +1,14 @@
-# Getting Started with MaliPoPay Ruby SDK
+# Getting Started with Malipopay Ruby SDK
 
 ## Prerequisites
 
 - **Ruby 3.0** or later
 - **Bundler** (included with Ruby)
-- A MaliPoPay merchant account with API credentials
+- A Malipopay merchant account with API credentials
 
 ## Installation
 
-Add MaliPoPay to your Gemfile:
+Add Malipopay to your Gemfile:
 
 ```ruby
 gem 'malipopay'
@@ -43,7 +43,7 @@ Collect TZS 50,000 from an M-Pesa customer in five lines:
 ```ruby
 require 'malipopay'
 
-client = MaliPoPay::Client.new(api_key: ENV['MALIPOPAY_API_KEY'])
+client = Malipopay::Client.new(api_key: ENV['MALIPOPAY_API_KEY'])
 
 result = client.payments.collect(
   amount: 50_000,
@@ -61,7 +61,7 @@ When this runs, the customer at `255712345678` receives a USSD push prompt on th
 
 ## Environment Selection
 
-MaliPoPay provides two environments:
+Malipopay provides two environments:
 
 | Environment | Base URL | Purpose |
 |-------------|----------|---------|
@@ -73,7 +73,7 @@ MaliPoPay provides two environments:
 Always develop and test against UAT before going live:
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_UAT_API_KEY'],
   environment: :uat
 )
@@ -84,7 +84,7 @@ client = MaliPoPay::Client.new(
 For advanced setups (proxies, custom routing), you can override the base URL:
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_API_KEY'],
   base_url: 'https://custom-proxy.example.com'
 )
@@ -97,7 +97,7 @@ When `base_url` is set, it takes precedence over the `environment` setting.
 The SDK automatically retries transient failures. You can adjust timeout and retry behavior:
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_API_KEY'],
   environment: :production,
   timeout: 60,    # seconds (default: 30)
@@ -114,7 +114,7 @@ require 'malipopay'
 
 api_key = ENV.fetch('MALIPOPAY_API_KEY') { raise 'Set the MALIPOPAY_API_KEY environment variable' }
 
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: api_key,
   environment: :uat
 )
@@ -143,11 +143,11 @@ begin
 
   puts "Payment status: #{verification['status']}"
 
-rescue MaliPoPay::AuthenticationError
+rescue Malipopay::AuthenticationError
   puts 'Invalid API key. Check your credentials.'
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   puts "Invalid request: #{e.message}"
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   puts "Payment error: #{e.message}"
 end
 ```

@@ -18,11 +18,11 @@ require_relative "malipopay/resources/references"
 # Webhooks
 require_relative "malipopay/webhooks/verifier"
 
-module MaliPoPay
+module Malipopay
   # Convenience method to create a new client
   #
-  # @param options [Hash] Options passed to MaliPoPay::Client.new
-  # @return [MaliPoPay::Client]
+  # @param options [Hash] Options passed to Malipopay::Client.new
+  # @return [Malipopay::Client]
   def self.client(**options)
     Client.new(**options)
   end

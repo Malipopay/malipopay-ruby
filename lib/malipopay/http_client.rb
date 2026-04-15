@@ -4,7 +4,7 @@ require "faraday"
 require "faraday/retry"
 require "json"
 
-module MaliPoPay
+module Malipopay
   class HttpClient
     BASE_URLS = {
       production: "https://core-prod.malipopay.co.tz",
@@ -59,7 +59,7 @@ module MaliPoPay
         conn.headers["apiToken"] = @api_key
         conn.headers["Content-Type"] = "application/json"
         conn.headers["Accept"] = "application/json"
-        conn.headers["User-Agent"] = "malipopay-ruby/#{MaliPoPay::VERSION}"
+        conn.headers["User-Agent"] = "malipopay-ruby/#{Malipopay::VERSION}"
 
         conn.options.timeout = @timeout
         conn.options.open_timeout = 10
@@ -82,9 +82,9 @@ module MaliPoPay
 
       handle_response(response)
     rescue Faraday::ConnectionFailed => e
-      raise MaliPoPay::ConnectionError.new("Connection failed: #{e.message}")
+      raise Malipopay::ConnectionError.new("Connection failed: #{e.message}")
     rescue Faraday::TimeoutError => e
-      raise MaliPoPay::ConnectionError.new("Request timed out: #{e.message}")
+      raise Malipopay::ConnectionError.new("Request timed out: #{e.message}")
     end
 
     def handle_response(response)
@@ -92,46 +92,46 @@ module MaliPoPay
       when 200..299
         response.body
       when 400
-        raise MaliPoPay::ValidationError.new(
+        raise Malipopay::ValidationError.new(
           error_message(response),
           errors: response.body&.dig("errors"),
           http_status: response.status,
           response_body: response.body
         )
       when 401
-        raise MaliPoPay::AuthenticationError.new(
+        raise Malipopay::AuthenticationError.new(
           error_message(response),
           http_status: response.status,
           response_body: response.body
         )
       when 403
-        raise MaliPoPay::PermissionError.new(
+        raise Malipopay::PermissionError.new(
           error_message(response),
           http_status: response.status,
           response_body: response.body
         )
       when 404
-        raise MaliPoPay::NotFoundError.new(
+        raise Malipopay::NotFoundError.new(
           error_message(response),
           http_status: response.status,
           response_body: response.body
         )
       when 422
-        raise MaliPoPay::ValidationError.new(
+        raise Malipopay::ValidationError.new(
           error_message(response),
           errors: response.body&.dig("errors"),
           http_status: response.status,
           response_body: response.body
         )
       when 429
-        raise MaliPoPay::RateLimitError.new(
+        raise Malipopay::RateLimitError.new(
           error_message(response),
           retry_after: response.headers["Retry-After"]&.to_i,
           http_status: response.status,
           response_body: response.body
         )
       else
-        raise MaliPoPay::ApiError.new(
+        raise Malipopay::ApiError.new(
           error_message(response),
           http_status: response.status,
           response_body: response.body

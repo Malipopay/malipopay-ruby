@@ -4,12 +4,12 @@ require_relative "lib/malipopay/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "malipopay"
-  spec.version       = MaliPoPay::VERSION
+  spec.version       = Malipopay::VERSION
   spec.authors       = ["Lockwood Technology Ltd"]
   spec.email         = ["developers@malipopay.co.tz"]
 
-  spec.summary       = "Official Ruby SDK for the MaliPoPay payment platform"
-  spec.description   = "Ruby client library for integrating with MaliPoPay payment APIs. " \
+  spec.summary       = "Official Ruby SDK for the Malipopay payment platform"
+  spec.description   = "Ruby client library for integrating with Malipopay payment APIs. " \
                         "Supports mobile money collections, disbursements, invoicing, " \
                         "SMS, customer management, and more."
   spec.homepage      = "https://github.com/malipopay/malipopay-ruby"

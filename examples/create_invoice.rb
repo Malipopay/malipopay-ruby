@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Example: Create and manage invoices via MaliPoPay
+# Example: Create and manage invoices via Malipopay
 #
 # Usage:
 #   MALIPOPAY_API_KEY=your_key ruby examples/create_invoice.rb
 
 require "malipopay"
 
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV.fetch("MALIPOPAY_API_KEY"),
   environment: :uat
 )
@@ -52,6 +52,6 @@ begin
   # List all invoices
   invoices = client.invoices.list(page: 1, limit: 10)
   puts "Total invoices: #{invoices['total']}"
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   puts "Error: #{e.message} (HTTP #{e.http_status})"
 end

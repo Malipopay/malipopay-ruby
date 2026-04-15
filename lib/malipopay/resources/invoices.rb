@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MaliPoPay
+module Malipopay
   module Resources
     class Invoices
       def initialize(http_client)

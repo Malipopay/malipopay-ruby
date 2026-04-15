@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Example: Collect mobile money payment via MaliPoPay
+# Example: Collect mobile money payment via Malipopay
 #
 # Usage:
 #   MALIPOPAY_API_KEY=your_key ruby examples/collect_mobile_money.rb
 
 require "malipopay"
 
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV.fetch("MALIPOPAY_API_KEY"),
   environment: :uat # Use :production for live transactions
 )
@@ -31,11 +31,11 @@ begin
   # Verify the payment status
   verification = client.payments.verify(result["reference"])
   puts "Verification status: #{verification['status']}"
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   puts "Validation failed: #{e.message}"
   puts "Errors: #{e.errors}" if e.errors
-rescue MaliPoPay::AuthenticationError => e
+rescue Malipopay::AuthenticationError => e
   puts "Authentication failed: #{e.message}"
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   puts "Error: #{e.message} (HTTP #{e.http_status})"
 end

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Example: Webhook handler for MaliPoPay events
+# Example: Webhook handler for Malipopay events
 #
 # This example uses Sinatra. Install it with:
 #   gem install sinatra
@@ -12,7 +12,7 @@
 require "sinatra"
 require "malipopay"
 
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV.fetch("MALIPOPAY_API_KEY"),
   webhook_secret: ENV.fetch("MALIPOPAY_WEBHOOK_SECRET")
 )
@@ -38,7 +38,7 @@ post "/webhooks/malipopay" do
 
     status 200
     json({ received: true })
-  rescue MaliPoPay::AuthenticationError => e
+  rescue Malipopay::AuthenticationError => e
     status 401
     json({ error: e.message })
   rescue JSON::ParserError

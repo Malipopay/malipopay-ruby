@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module MaliPoPay
-  # Base error class for all MaliPoPay errors
+module Malipopay
+  # Base error class for all Malipopay errors
   class Error < StandardError
     attr_reader :http_status, :response_body
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MaliPoPay
+module Malipopay
   module Resources
     class Payments
       def initialize(http_client)
@@ -81,7 +81,7 @@ module MaliPoPay
       # @param params [Hash] Payment link parameters
       # @return [Hash] Payment link response
       def create_link(params)
-        @http.post("/api/v1/pay", body: params)
+        @http.post("/api/v1/payment/link", body: params)
       end
     end
   end

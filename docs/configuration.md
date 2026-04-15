@@ -1,13 +1,13 @@
 # Configuration
 
-This guide covers all the ways to configure the MaliPoPay Ruby SDK, from basic client setup to Rails integration.
+This guide covers all the ways to configure the Malipopay Ruby SDK, from basic client setup to Rails integration.
 
-## MaliPoPay::Client Options
+## Malipopay::Client Options
 
-The `MaliPoPay::Client.new` constructor accepts the following options:
+The `Malipopay::Client.new` constructor accepts the following options:
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: 'your_api_key',
   environment: :production,   # or :uat
   base_url: nil,              # overrides environment if set
@@ -21,7 +21,7 @@ client = MaliPoPay::Client.new(
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `api_key` | `String` | *required* | Your MaliPoPay API key |
+| `api_key` | `String` | *required* | Your Malipopay API key |
 | `environment` | `Symbol` | `:production` | `:production` or `:uat` |
 | `base_url` | `String` | `nil` | Custom base URL; overrides `environment` when set |
 | `timeout` | `Integer` | `30` | HTTP request timeout in seconds |
@@ -41,10 +41,10 @@ The SDK accepts both symbols and strings for the `environment` option. Symbols a
 
 ```ruby
 # Preferred (symbol)
-client = MaliPoPay::Client.new(api_key: key, environment: :uat)
+client = Malipopay::Client.new(api_key: key, environment: :uat)
 
 # Also works (string)
-client = MaliPoPay::Client.new(api_key: key, environment: 'uat')
+client = Malipopay::Client.new(api_key: key, environment: 'uat')
 ```
 
 The same applies to provider names in payment methods -- you can use either:
@@ -61,13 +61,13 @@ client.payments.collect(provider: :'M-Pesa', ...)
 
 ```ruby
 # Production with defaults (30s timeout, 2 retries)
-client = MaliPoPay::Client.new(api_key: ENV['MALIPOPAY_API_KEY'])
+client = Malipopay::Client.new(api_key: ENV['MALIPOPAY_API_KEY'])
 ```
 
 ### UAT for Testing
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_UAT_API_KEY'],
   environment: :uat
 )
@@ -76,7 +76,7 @@ client = MaliPoPay::Client.new(
 ### Custom Timeout and Retries
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_API_KEY'],
   environment: :production,
   timeout: 60,    # longer timeout for slow networks
@@ -88,7 +88,7 @@ client = MaliPoPay::Client.new(
 
 ### Automatic Based on RACK_ENV / RAILS_ENV
 
-Tie the MaliPoPay environment to your application environment:
+Tie the Malipopay environment to your application environment:
 
 ```ruby
 malipopay_env = if ENV['RACK_ENV'] == 'production' || ENV['RAILS_ENV'] == 'production'
@@ -103,7 +103,7 @@ api_key = if malipopay_env == :production
             ENV.fetch('MALIPOPAY_UAT_API_KEY')
           end
 
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: api_key,
   environment: malipopay_env
 )
@@ -114,7 +114,7 @@ client = MaliPoPay::Client.new(
 For proxies or custom routing:
 
 ```ruby
-client = MaliPoPay::Client.new(
+client = Malipopay::Client.new(
   api_key: ENV['MALIPOPAY_API_KEY'],
   base_url: 'https://custom-proxy.example.com'
 )
@@ -131,7 +131,7 @@ Create a Rails initializer to configure the client globally:
 ```ruby
 # config/initializers/malipopay.rb
 
-MALIPOPAY_CLIENT = MaliPoPay::Client.new(
+MALIPOPAY_CLIENT = Malipopay::Client.new(
   api_key: Rails.application.credentials.dig(:malipopay, :api_key) ||
            ENV.fetch('MALIPOPAY_API_KEY'),
   environment: Rails.env.production? ? :production : :uat,
@@ -161,7 +161,7 @@ class PaymentsController < ApplicationController
     else
       render json: { error: result['message'] }, status: :unprocessable_entity
     end
-  rescue MaliPoPay::Error => e
+  rescue Malipopay::Error => e
     render json: { error: e.message }, status: :service_unavailable
   end
 end
@@ -175,7 +175,7 @@ Store your API keys securely with Rails credentials:
 EDITOR=vim rails credentials:edit
 ```
 
-Add your MaliPoPay keys:
+Add your Malipopay keys:
 
 ```yaml
 malipopay:
@@ -224,7 +224,7 @@ require 'sinatra'
 require 'malipopay'
 
 configure do
-  set :malipopay, MaliPoPay::Client.new(
+  set :malipopay, Malipopay::Client.new(
     api_key: ENV.fetch('MALIPOPAY_API_KEY'),
     environment: settings.production? ? :production : :uat
   )
@@ -248,14 +248,14 @@ end
 
 ### Timeout
 
-The `timeout` option controls how long the SDK waits for an API response before raising `MaliPoPay::ConnectionError`:
+The `timeout` option controls how long the SDK waits for an API response before raising `Malipopay::ConnectionError`:
 
 ```ruby
 # Short timeout for fast-fail scenarios
-client = MaliPoPay::Client.new(api_key: key, timeout: 10)
+client = Malipopay::Client.new(api_key: key, timeout: 10)
 
 # Longer timeout for slow networks or large batch operations
-client = MaliPoPay::Client.new(api_key: key, timeout: 120)
+client = Malipopay::Client.new(api_key: key, timeout: 120)
 ```
 
 ### Retries
@@ -264,10 +264,10 @@ The `retries` option controls how many times the SDK retries on transient errors
 
 ```ruby
 # No automatic retries (handle retries yourself)
-client = MaliPoPay::Client.new(api_key: key, retries: 0)
+client = Malipopay::Client.new(api_key: key, retries: 0)
 
 # Aggressive retries for critical operations
-client = MaliPoPay::Client.new(api_key: key, retries: 5)
+client = Malipopay::Client.new(api_key: key, retries: 5)
 ```
 
 The SDK uses exponential backoff between retries (1s, 2s, 4s, ...).

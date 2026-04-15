@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module MaliPoPay
+module Malipopay
   module Resources
     class Sms
       def initialize(http_client)

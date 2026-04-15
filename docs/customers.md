@@ -1,6 +1,6 @@
 # Customers
 
-The `customers` resource lets you create, retrieve, search, and verify customer records. Customers are linked to payments, invoices, and transaction history in MaliPoPay.
+The `customers` resource lets you create, retrieve, search, and verify customer records. Customers are linked to payments, invoices, and transaction history in Malipopay.
 
 ## Create a Customer
 
@@ -71,7 +71,7 @@ end
 
 ## Get a Customer by Customer Number
 
-Look up using the MaliPoPay-assigned customer number:
+Look up using the Malipopay-assigned customer number:
 
 ```ruby
 customer = client.customers.get_by_number('CUST-2024-001')
@@ -118,11 +118,11 @@ begin
     name: 'Incomplete Customer'
     # missing phone -- will trigger validation error
   )
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   puts "Missing required fields: #{e.message}"
-rescue MaliPoPay::NotFoundError
+rescue Malipopay::NotFoundError
   puts 'Customer not found.'
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   puts "Error: #{e.message}"
 end
 ```

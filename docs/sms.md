@@ -29,9 +29,9 @@ begin
   )
 
   puts "Message delivered: #{sms['data']}"
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   puts "Invalid request: #{e.message}"
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   puts "SMS error: #{e.message}"
 end
 ```
@@ -122,12 +122,12 @@ The `sender_id` field controls what appears as the sender on the recipient's pho
 
 | Sender ID | Description |
 |-----------|-------------|
-| `MALIPOPAY` | Default MaliPoPay sender ID |
+| `MALIPOPAY` | Default Malipopay sender ID |
 | Custom (e.g., `ACME`) | Your registered brand name |
 
 ### Registering a Custom Sender ID
 
-Custom sender IDs must be registered and approved in your MaliPoPay dashboard:
+Custom sender IDs must be registered and approved in your Malipopay dashboard:
 
 1. Go to [app.malipopay.co.tz](https://app.malipopay.co.tz) > **Settings > SMS > Sender IDs**
 2. Click **Request New Sender ID**

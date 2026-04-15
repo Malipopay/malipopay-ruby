@@ -39,7 +39,7 @@ In this example, the subtotal is TZS 3,175,000 (2,500,000 + 75,000 + 600,000), a
 
 ## Tax Calculation
 
-MaliPoPay calculates tax automatically based on the `tax_rate` you provide:
+Malipopay calculates tax automatically based on the `tax_rate` you provide:
 
 ```ruby
 # Invoice with 18% VAT (Tanzania standard rate)
@@ -184,11 +184,11 @@ begin
       { description: 'Test', quantity: 1, unit_price: 1_000 }
     ]
   )
-rescue MaliPoPay::ValidationError => e
+rescue Malipopay::ValidationError => e
   puts "Invalid invoice data: #{e.message}"
-rescue MaliPoPay::NotFoundError
+rescue Malipopay::NotFoundError
   puts 'Customer not found. Create the customer first.'
-rescue MaliPoPay::Error => e
+rescue Malipopay::Error => e
   puts "Invoice error: #{e.message}"
 end
 ```

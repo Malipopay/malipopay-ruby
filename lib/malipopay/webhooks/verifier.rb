@@ -3,7 +3,7 @@
 require "openssl"
 require "json"
 
-module MaliPoPay
+module Malipopay
   module Webhooks
     class Verifier
       TOLERANCE_IN_SECONDS = 300 # 5 minutes
@@ -14,8 +14,8 @@ module MaliPoPay
 
       # Verify a webhook signature
       # @param payload [String] Raw request body
-      # @param signature [String] Signature from X-MaliPoPay-Signature header
-      # @param timestamp [String, nil] Timestamp from X-MaliPoPay-Timestamp header
+      # @param signature [String] Signature from X-Malipopay-Signature header
+      # @param timestamp [String, nil] Timestamp from X-Malipopay-Timestamp header
       # @return [Boolean] Whether the signature is valid
       def verify(payload, signature, timestamp: nil)
         return false if signature.nil? || signature.empty?
@@ -34,10 +34,10 @@ module MaliPoPay
       # @param signature [String] Signature from header
       # @param timestamp [String, nil] Timestamp from header
       # @return [Hash] Parsed event data
-      # @raise [MaliPoPay::Error] If signature is invalid
+      # @raise [Malipopay::Error] If signature is invalid
       def construct_event(payload, signature, timestamp: nil)
         unless verify(payload, signature, timestamp: timestamp)
-          raise MaliPoPay::AuthenticationError.new("Invalid webhook signature")
+          raise Malipopay::AuthenticationError.new("Invalid webhook signature")
         end
 
         JSON.parse(payload)

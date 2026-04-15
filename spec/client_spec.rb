@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-RSpec.describe MaliPoPay::Client do
+RSpec.describe Malipopay::Client do
   let(:api_key) { "test_api_key_123" }
 
   describe "#initialize" do
     it "creates a client with required api_key" do
       client = described_class.new(api_key: api_key)
-      expect(client).to be_a(MaliPoPay::Client)
+      expect(client).to be_a(Malipopay::Client)
     end
 
     it "raises ArgumentError when api_key is nil" do
@@ -21,17 +21,17 @@ RSpec.describe MaliPoPay::Client do
 
     it "defaults to production environment" do
       client = described_class.new(api_key: api_key)
-      expect(client.http_client).to be_a(MaliPoPay::HttpClient)
+      expect(client.http_client).to be_a(Malipopay::HttpClient)
     end
 
     it "accepts uat environment" do
       client = described_class.new(api_key: api_key, environment: :uat)
-      expect(client).to be_a(MaliPoPay::Client)
+      expect(client).to be_a(Malipopay::Client)
     end
 
     it "accepts a custom base_url" do
       client = described_class.new(api_key: api_key, base_url: "https://custom.example.com")
-      expect(client).to be_a(MaliPoPay::Client)
+      expect(client).to be_a(Malipopay::Client)
     end
 
     it "stores the webhook_secret" do
@@ -44,35 +44,35 @@ RSpec.describe MaliPoPay::Client do
     let(:client) { described_class.new(api_key: api_key) }
 
     it "returns a Payments resource" do
-      expect(client.payments).to be_a(MaliPoPay::Resources::Payments)
+      expect(client.payments).to be_a(Malipopay::Resources::Payments)
     end
 
     it "returns a Customers resource" do
-      expect(client.customers).to be_a(MaliPoPay::Resources::Customers)
+      expect(client.customers).to be_a(Malipopay::Resources::Customers)
     end
 
     it "returns an Invoices resource" do
-      expect(client.invoices).to be_a(MaliPoPay::Resources::Invoices)
+      expect(client.invoices).to be_a(Malipopay::Resources::Invoices)
     end
 
     it "returns a Products resource" do
-      expect(client.products).to be_a(MaliPoPay::Resources::Products)
+      expect(client.products).to be_a(Malipopay::Resources::Products)
     end
 
     it "returns a Transactions resource" do
-      expect(client.transactions).to be_a(MaliPoPay::Resources::Transactions)
+      expect(client.transactions).to be_a(Malipopay::Resources::Transactions)
     end
 
     it "returns an Account resource" do
-      expect(client.account).to be_a(MaliPoPay::Resources::Account)
+      expect(client.account).to be_a(Malipopay::Resources::Account)
     end
 
     it "returns an Sms resource" do
-      expect(client.sms).to be_a(MaliPoPay::Resources::Sms)
+      expect(client.sms).to be_a(Malipopay::Resources::Sms)
     end
 
     it "returns a References resource" do
-      expect(client.references).to be_a(MaliPoPay::Resources::References)
+      expect(client.references).to be_a(Malipopay::Resources::References)
     end
 
     it "memoizes resource instances" do
@@ -81,7 +81,7 @@ RSpec.describe MaliPoPay::Client do
 
     it "returns a Webhooks verifier when secret is provided" do
       client = described_class.new(api_key: api_key, webhook_secret: "whsec_test")
-      expect(client.webhooks).to be_a(MaliPoPay::Webhooks::Verifier)
+      expect(client.webhooks).to be_a(Malipopay::Webhooks::Verifier)
     end
 
     it "raises when accessing webhooks without a secret" do
@@ -90,9 +90,9 @@ RSpec.describe MaliPoPay::Client do
   end
 
   describe ".client convenience method" do
-    it "creates a client via MaliPoPay.client" do
-      client = MaliPoPay.client(api_key: api_key)
-      expect(client).to be_a(MaliPoPay::Client)
+    it "creates a client via Malipopay.client" do
+      client = Malipopay.client(api_key: api_key)
+      expect(client).to be_a(Malipopay::Client)
     end
   end
 end

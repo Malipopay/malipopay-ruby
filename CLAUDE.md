@@ -39,8 +39,8 @@ $client = new Malipopay("api-key");
 
 ```java
 // Java
-import co.tz.malipopay.Malipopay;
-import co.tz.malipopay.MalipopayConfig;
+import tz.co.malipopay.Malipopay;
+import tz.co.malipopay.MalipopayConfig;
 Malipopay client = new Malipopay("api-key");
 ```
 
@@ -76,7 +76,7 @@ https://github.com/Malipopay
 | Node.js | `malipopay` | npm |
 | Python | `malipopay` | PyPI |
 | PHP | `malipopay/malipopay-php` | Packagist |
-| Java | `co.tz.malipopay:malipopay-java` | Maven Central |
+| Java | `tz.co.malipopay:malipopay-java` | Maven Central |
 | .NET | `Malipopay` | NuGet |
 | Ruby | `malipopay` | RubyGems |
 

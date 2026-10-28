@@ -40,6 +40,15 @@ RSpec.describe Malipopay::Webhooks::Verifier do
       expect(verifier.verify(payload, signature, timestamp: timestamp)).to be true
     end
 
+    it "accepts the sha256= header prefix Malipopay sends" do
+      signature = described_class.sign(payload, secret)
+      expect(verifier.verify(payload, "sha256=#{signature}")).to be true
+    end
+
+    it "returns false when only the prefix is present" do
+      expect(verifier.verify(payload, "sha256=")).to be false
+    end
+
     it "returns false for an invalid signature" do
       expect(verifier.verify(payload, "invalid_signature")).to be false
     end

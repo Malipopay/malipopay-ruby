@@ -20,6 +20,11 @@ module Malipopay
       def verify(payload, signature, timestamp: nil)
         return false if signature.nil? || signature.empty?
 
+        # The X-Malipopay-Signature header carries a "sha256=" prefix
+        # (matching the Node/PHP/Python SDKs). Strip it before comparing.
+        signature = signature.delete_prefix("sha256=")
+        return false if signature.empty?
+
         if timestamp
           ts = timestamp.to_i
           return false if (Time.now.to_i - ts).abs > TOLERANCE_IN_SECONDS
